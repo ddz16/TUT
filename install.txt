@@ -1,0 +1,14 @@
+
+conda create --name eut python=3.9
+
+pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+
+pip install matplotlib
+
+pip install seaborn
+
+pip install tqdm
+
+# to caculate Wasserstein distance
+pip install pykeops
+pip install geomloss

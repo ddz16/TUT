@@ -1,9 +1,10 @@
-all_results_and_models/50salads/results
-attn
-checkpoints
-data
-results
+/all_results_and_models/50salads/results
+/attn
+/checkpoints
+/data
+/results
 data.zip
 p.sh
 p2.sh
 p3.sh
+

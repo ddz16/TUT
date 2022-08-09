@@ -303,8 +303,8 @@ class LocalAttention(nn.Module):
             out = self.W_out(self.dropout(out))  # * input_mask  # (B, d_model, L) -> (B, d_v, L)
 
             if attn is not None:
-                attn_distrib = extract_dis_from_attention(attn, window_size)
+                attn_distrib = extract_dis_from_attention(attn, window_size)  # (B, H, L, window_size)
             else:
                 attn_distrib = None
 
-        return out, attn_distrib  # (B, H, L, window_size)
+        return out, attn_distrib

@@ -96,17 +96,25 @@ def class2boundary(target):
 #     return dis
 
 
-def create_distribution_from_cls(cls, window_size):
+def create_distribution_from_cls(cls, window_size, chi2=True):
     """
     cls: 0 is begin, 1 is middle, 2 is end
     return (window_size)
     """
-    if cls == 0:
-        dis = create_chi2_distribution(window_size, right=True)
-    elif cls == 2:
-        dis = create_chi2_distribution(window_size, right=False)
+    if chi2:
+        if cls == 0:
+            dis = create_chi2_distribution(window_size, right=True)
+        elif cls == 2:
+            dis = create_chi2_distribution(window_size, right=False)
+        else:
+            dis = create_normal_distribution(10, window_size)
     else:
-        dis = create_normal_distribution(10, window_size)
+        if cls == 0:
+            dis = create_half_distribution(window_size, right=True)
+        elif cls == 2:
+            dis = create_half_distribution(window_size, right=False)
+        else:
+            dis = create_normal_distribution(10, window_size)
     return dis
 
 
@@ -155,9 +163,9 @@ def extract_dis_from_attention(attention_map, window_size):
     """
     B, H, l1, l2 = attention_map.shape
     if l1 == l2:
-        attention_map = torch.cat([torch.zeros(l1, window_size // 2, device=attention_map.device),
+        attention_map = torch.cat([torch.zeros(B, H, l1, window_size // 2, device=attention_map.device),
                                    attention_map,
-                                   torch.zeros(l1, window_size // 2, device=attention_map.device)], dim=1)
+                                   torch.zeros(B, H, l1, window_size // 2, device=attention_map.device)], dim=3)
         l2 = attention_map.shape[3]
 
     assert attention_map.shape[2] + 2 * (window_size // 2) == attention_map.shape[3]

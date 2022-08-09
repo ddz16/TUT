@@ -1,18 +1,19 @@
 import torch
-from exp.exp_EUT import ExpEUT
+from exp.exp_TUT import ExpTUT
+from exp.exp_C2FTCN import ExpC2FTCN
 from exp.exp_other import ExpOther
 import os
 import argparse
 import random
 
-seed = 19990605
+seed = 19990703
 random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)
 torch.backends.cudnn.deterministic = True
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', default='EUT')
+parser.add_argument('--model', default='TUT')
 parser.add_argument('--action', default='train')
 parser.add_argument('--dataset', default="gtea")
 parser.add_argument('--split', default='1')
@@ -58,6 +59,8 @@ parser.add_argument('--num_epochs', type=int, default=100)
 parser.add_argument('--num_workers', type=int, default=1)
 parser.add_argument('--gpu', type=int, default=0)
 
+parser.add_argument('--train_ratio', type=float, default=1.0)
+
 args = parser.parse_args()
 
 args.device = torch.device("cuda:"+str(args.gpu) if torch.cuda.is_available() else "cpu")
@@ -76,8 +79,10 @@ if not os.path.exists(attn_dir):
 dataset2numclasses = {"gtea": 11, "50salads": 19, "breakfast": 48}
 args.num_classes = dataset2numclasses[args.dataset]
 
-if args.model == 'EUT':
-    my_exp = ExpEUT(configs=args)
+if args.model == 'TUT':
+    my_exp = ExpTUT(configs=args)
+elif args.model == 'C2FTCN':
+    my_exp = ExpC2FTCN(configs=args)
 else:
     my_exp = ExpOther(configs=args)
 

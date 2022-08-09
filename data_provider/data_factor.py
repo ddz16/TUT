@@ -1,6 +1,6 @@
 from data_provider.data_loader import my_collate_func, Dataset_food, Dataset_toy
-from torch.utils.data import DataLoader
-
+from torch.utils.data import DataLoader, RandomSampler
+import torch
 
 def data_provider(args, mode):
 
@@ -29,6 +29,14 @@ def data_provider(args, mode):
         raise RuntimeError("dataset name must be in [gtea, 50salads, breakfast, assembly]! please check it!")
 
     print(mode, len(data_set))
+    # if mode == 'train':
+    #     train_size = int(args.train_ratio * len(data_set))
+    #     drop_size = len(data_set) - train_size
+    #     data_set, _ = torch.utils.data.random_split(
+    #         dataset=data_set,
+    #         lengths=[train_size, drop_size],
+    #         generator=torch.Generator().manual_seed(0)
+    #     )
 
     data_loader = DataLoader(
         data_set,

@@ -90,7 +90,7 @@ class ExpOther:
 
             logger.info("[epoch %d]: epoch loss = %f, acc = %f" % (epoch + 1, epoch_loss / len(train_data),
                                                                      float(correct)/total))
-            if (epoch + 1) % 5 == 0:
+            if (epoch + 1) % 10 == 0:
                 self.test(test_loader, epoch)
 
 

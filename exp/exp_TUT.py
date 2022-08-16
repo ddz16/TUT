@@ -11,7 +11,7 @@ from models.TUT import TUT
 from data_provider.data_factor import data_provider
 
 from eval import segment_bars_with_confidence
-from utils import KL_loss, SKL_loss, JS_loss, W_loss, L2_loss, CE_loss, class2boundary, extract_dis_from_attention, create_distribution_from_cls
+from utils import KL_loss, SKL_loss, JS_loss, W_loss, L2_loss, CE_loss, class2boundary, extract_dis_from_attention, create_distribution_from_cls, plot_attention_map
 
 
 class ExpTUT:
@@ -73,7 +73,7 @@ class ExpTUT:
 
                 if self.configs.baloss:
                     baloss = torch.tensor(0.0).to(self.device)
-                    use_chi = True
+                    use_chi = False
                     loss_layer_num = 1
                     #    (1,L)      (begin_length)   (end_length)
                     # extract from all layers (different resolution) to get begin_index and end_index
@@ -97,8 +97,8 @@ class ExpTUT:
                             if begin_index_list[i+1].shape[0] > 0 and end_index_list[i+1].shape[0] > 0:
                                 attn_begin = torch.index_select(attn[i], dim=2, index=begin_index_list[i+1].to(self.device))  # (B,H,l,window_size), encoder layer attn begin
                                 attn_end = torch.index_select(attn[i], dim=2, index=end_index_list[i+1].to(self.device))  # (B,H,l,window_size), encoder layer attn end
-                                baloss += self.configs.beta * JS_loss(attn_begin, create_distribution_from_cls(0, self.configs.window_size, use_chi).to(self.device))
-                                baloss += self.configs.beta * JS_loss(attn_end, create_distribution_from_cls(2, self.configs.window_size, use_chi).to(self.device))
+                                baloss += self.configs.beta * KL_loss(attn_begin, create_distribution_from_cls(0, self.configs.window_size, use_chi).to(self.device))
+                                baloss += self.configs.beta * KL_loss(attn_end, create_distribution_from_cls(2, self.configs.window_size, use_chi).to(self.device))
                             # print(attn_begin)
                             # print(attn_end)
                             # print(baloss)
@@ -107,6 +107,7 @@ class ExpTUT:
                             # attn_end = torch.index_select(attn[-i-1], dim=2, index=end_index_list[i].to(device))  # (1,H,l,window_size), decoder layer attn begin
                             # baloss += self.configs.beta * KL_loss(attn_begin, create_distribution_from_cls(0, self.configs.window_size, use_chi).to(device))
                             # baloss += self.configs.beta * KL_loss(attn_end, create_distribution_from_cls(2, self.configs.window_size, use_chi).to(device))
+                        # break # comment on 50Salads and GTEA, meaning use all stages; if not comment, meaning only use prediction stage
                     epoch_ba_loss += baloss.item()
                     loss += baloss
 
@@ -186,6 +187,11 @@ class ExpTUT:
                     recognition = np.concatenate((recognition, [list(actions_dict.keys())[
                                                                     list(actions_dict.values()).index(
                                                                         predicted[i].item())]] * sample_rate))
+
+                if vid == 'rgb-27-1.txt':
+                    for i in range(len(all_attns)):
+                        plot_attention_map(all_attns[i][0][0,0,100:600,:].cpu().numpy(), self.configs.attn_dir + '/{}_stage{}_encoder.png'.format(vid, i))
+                        # plot_attention_map(all_attns[i][0][0,1,100:600,:].cpu().numpy(), self.configs.attn_dir + '/{}_stage{}_encoder.png'.format(vid, 1))
 
                 f_name = vid.split('/')[-1].split('.')[0]
                 f_ptr = open(self.configs.results_dir + "/" + f_name, "w")

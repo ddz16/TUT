@@ -6,7 +6,7 @@ import os
 import argparse
 import random
 
-seed = 19990703
+seed = 19990605
 random.seed(seed)
 torch.manual_seed(seed)
 torch.cuda.manual_seed_all(seed)

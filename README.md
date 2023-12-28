@@ -1,8 +1,7 @@
-# Efficient U-Transformer with Boundary-Aware Loss for Action Segmentation
+# Do we really need temporal convolutions in action segmentation?
 
-This repository is the official implementation of **Efficient U-Transformer with Boundary-Aware Loss for Action Segmentation**.
+This repository is the official implementation of 2023 ICME paper: **[Do we really need temporal convolutions in action segmentation?](https://arxiv.org/abs/2205.13425)**.
 
-<img src="C:\Users\86188\AppData\Roaming\Typora\typora-user-images\image-20220520170052909.png" alt="image-20220520170052909" style="zoom:67%;" />
 
 ## Requirements
 
@@ -66,10 +65,22 @@ python eval.py --dataset=50salads/gtea/breakfast --split=1/2/3/4/5
 
 ## Pre-trained Models
 
-Limited by the max size of supplementary material, we provide pretrained models on the 50Salads dataset in the `./models` folder. 
+We provide pretrained models in the `./models` folder. 
 
 You can directly run this command to predict results of the 50Salads dataset using the pretrained models (without training from scratch):
 
 ```predict
 python main.py --action=predict --dataset=50salads --split=1/2/3/4/5 --pg_layers=5 --r_layers=5 --num_R=3 --l_seg=200 --window_size=51 --d_model_PG=128 --d_ffn_PG=128 --n_heads_PG=4 --d_model_R=64 --d_ffn_R=64 --n_heads_R=4 --bz=1 --activation=relu --input_dropout=0.4 --ffn_dropout=0.3 --attention_dropout=0.2 --num_epochs=150
+```
+
+## Acknowledgment
+```
+@inproceedings{du2023we,
+  title={Do We Really Need Temporal Convolutions in Action Segmentation?},
+  author={Du, Dazhao and Su, Bing and Li, Yu and Qi, Zhongang and Si, Lingyu and Shan, Ying},
+  booktitle={2023 IEEE International Conference on Multimedia and Expo (ICME)},
+  pages={1014--1019},
+  year={2023},
+  organization={IEEE}
+}
 ```

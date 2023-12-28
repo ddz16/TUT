@@ -65,7 +65,7 @@ python eval.py --dataset=50salads/gtea/breakfast --split=1/2/3/4/5
 
 ## Pre-trained Models
 
-We provide pretrained models in the `./models` folder. 
+We provide pretrained models in the `./all_results_and_model/dataset/checkpoints` folder. 
 
 You can directly run this command to predict results of the 50Salads dataset using the pretrained models (without training from scratch):
 

@@ -73,7 +73,7 @@ You can directly run this command to predict results of the 50Salads dataset usi
 python main.py --action=predict --dataset=50salads --split=1/2/3/4/5 --pg_layers=5 --r_layers=5 --num_R=3 --l_seg=200 --window_size=51 --d_model_PG=128 --d_ffn_PG=128 --n_heads_PG=4 --d_model_R=64 --d_ffn_R=64 --n_heads_R=4 --bz=1 --activation=relu --input_dropout=0.4 --ffn_dropout=0.3 --attention_dropout=0.2 --num_epochs=150
 ```
 
-## Acknowledgment
+## Citation
 ```
 @inproceedings{du2023we,
   title={Do We Really Need Temporal Convolutions in Action Segmentation?},
